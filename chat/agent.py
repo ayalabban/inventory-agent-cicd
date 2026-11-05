@@ -24,11 +24,14 @@ Rules:
 
 MAX_STEPS = 5
 
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-
-
 def run_agent(user_message, previous_interaction_id=None, verbose=False):
     """Send a message to the agent and run tools until it produces an answer."""
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not configured.")
+
+    client = genai.Client(api_key=api_key)
 
     interaction = client.interactions.create(
         model=MODEL,
